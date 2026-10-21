@@ -190,6 +190,12 @@
                 <Binding target="Value" binding="ProcessContext::CustomerDetail.name" bindingMode="TWO_WAY" />
               </Bindings>
             </InputArea>
+            <InputArea name="GASOVat" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOVatId" defaultLabel="NIF" />
+                <Binding target="Value" binding="ProcessContext::customerDetail.gasoVat" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
             <InputArea name="SecondName">
               <Bindings>
                 <Resource target="Label" type="Label" defaultLabel="Second Name" id="Name2Id" />
