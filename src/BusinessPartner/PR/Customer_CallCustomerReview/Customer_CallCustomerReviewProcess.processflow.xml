@@ -5,6 +5,7 @@
         <Declaration name="CustomerCallList" type="LoCustomerCall" />
         <Declaration name="CustomerRelationList" type="LoBpaRelation" />
         <Declaration name="CustomerDetail" type="BoCustomer" />
+        <Declaration name="accountReceivableList" type="LoAccountReceivables" />
         <Declaration name="ContactPartnerDetail" type="BoContactPartner" />
         <Declaration name="POSDetail" type="BoPos" />
         <Declaration name="PosName" type="String" />
@@ -118,6 +119,7 @@
       <!-- Decision Point for selected Tab Pages -->
       <Action name="TabDecision" actionType="DECISION" parameter="Event.tabName">
         <Case value="Map" action="GetMainAddress" />
+        <Case value="AccountReceivables" action="createAccountReceivablesList" />
         <!--Account Harmonization: obsolete  <Case value="OpeningHours" action="LoadLoOpeningTime" /> -->
         <Case value="OpenHours" action="LoadIsOperatingHourEnabledSetting" />
         <Case value="Contact" action="LoadLoContactPartner" />
@@ -137,6 +139,16 @@
       <Action name="HideChartToolTip" actionType="LOGIC" call="ProcessContext::boCustomerReports.chartHelper.hideChartToolTip">
         <Parameters>
           <Input name="containerName" value="CallCustomerRevenueReportContainer" type="Literal" />
+        </Parameters>
+      </Action>
+      <Action name="createAccountReceivablesList" actionType="CREATE" type="LoAccountReceivables">
+        <Return name="ProcessContext::accountReceivableList" />
+        <TransitionTo action="loadAccountReceivablesList" />
+      </Action>
+      <Action name="loadAccountReceivablesList" actionType="LOGIC"
+              call="ProcessContext::accountReceivableList.calculateAccountReceivablesForCard">
+        <Parameters>
+          <Input name="customerPKey" value="ProcessContext::customerDetail.pKey" />
         </Parameters>
       </Action>
       <!-- Map Tab -->

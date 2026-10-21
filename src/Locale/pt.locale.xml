@@ -1055,6 +1055,11 @@
         <Label id="TimeFromTimeSlot" text="Hora de início" translationStatus="7"/>
         <Label id="TimeSlotGroupId" text="Faixa de tempo" translationStatus="7"/>
         <Label id="TimeThruTimeSlot" text="Hora de fim" translationStatus="7"/>
+        <Label id="GASOAccountStatementId" text="Conta corrente" translationStatus="7"/>
+        <Label id="AmountLabelId" text="Valor" translationStatus="7"/>
+        <Label id="AmountOpenLabelId" text="Em aberto" translationStatus="7"/>
+        <Label id="DueDateLabelId" text="Vencimento" translationStatus="7"/>
+        <Label id="ReceiptDateLabelId" text="Data de receção" translationStatus="7"/>
       </UserInterface>
       <UserInterface id="CustomerCreateCustomerWizardUI">
         <Label id="CreateCustomerTitleId" text="Novo cliente" translationStatus="7"/>
@@ -1224,6 +1229,11 @@
         <Label id="TimeFromTimeSlot" text="Hora de início" translationStatus="7"/>
         <Label id="TimeSlotGroupId" text="Faixa de tempo" translationStatus="7"/>
         <Label id="TimeThruTimeSlot" text="Hora de fim" translationStatus="7"/>
+        <Label id="GASOAccountStatementId" text="Conta corrente" translationStatus="7"/>
+        <Label id="AmountLabelId" text="Valor" translationStatus="7"/>
+        <Label id="AmountOpenLabelId" text="Em aberto" translationStatus="7"/>
+        <Label id="DueDateLabelId" text="Vencimento" translationStatus="7"/>
+        <Label id="ReceiptDateLabelId" text="Data de receção" translationStatus="7"/>
       </UserInterface>
       <UserInterface id="DeliveryRecipientLookup">
         <Label id="DeliveryRecipientLookupTitleId" text="Clientes" translationStatus="7"/>
