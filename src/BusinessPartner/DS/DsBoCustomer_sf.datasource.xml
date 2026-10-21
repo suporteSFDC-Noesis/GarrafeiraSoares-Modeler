@@ -27,6 +27,7 @@
     <Attribute name="accountDi" table="Account_Extension__c" column="Distribution_Issue__c" />
     <Attribute name="accountOi" table="Account_Extension__c" column="OOS_Issue__c" />
     <Attribute name="operatingHoursId" table="Account" column="OperatingHoursId" />
+    <Attribute name="gasoVat" table="Account" column="GASO_VAT__c" />
     <DerivedAttribute name="emailEditable" value="'0'" />
   </Attributes>
   <Entities>
