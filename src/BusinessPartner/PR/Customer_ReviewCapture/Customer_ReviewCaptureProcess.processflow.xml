@@ -335,7 +335,7 @@
         <TransitionTo action="loadAccountReceivablesList" />
       </Action>
       <Action name="loadAccountReceivablesList" actionType="LOGIC"
-              call="ProcessContext::accountReceivableList.calculateAccountReceivablesForCard">
+              call="ProcessContext::accountReceivableList.myGasoLoadForAccountAsync">
         <Parameters>
           <Input name="customerPKey" value="ProcessContext::customerDetail.pKey" />
         </Parameters>

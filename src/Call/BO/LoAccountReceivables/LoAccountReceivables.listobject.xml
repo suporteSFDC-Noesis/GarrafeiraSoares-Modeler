@@ -11,6 +11,7 @@
     <Method name="loadAsync" />
     <Method name="saveAsync" />
     <Method name="calculateAccountReceivablesForCard" />
+    <Method name="myGasoLoadForAccountAsync" />
     <Method name="prepareAccountReceivablesCardInfo" />
   </Methods>
 </ListObject>
