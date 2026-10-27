@@ -362,5 +362,19 @@
   <Label id="Visit_Summary_Duration_Minutes_Suffix" text="min" translationStatus="7"/>
   <!-- Quantity Suggestion -->
   <Label id="Quantity_Suggestion_Prefix" text="Suggested Qty" translationStatus="7"/>
+  <!-- GASO Account Statement -->
+  <Label id="AccountReceivables_SyncOnline" text="Updated on" translationStatus="7"/>
+  <Label id="AccountReceivables_SyncOffline" text="No connection. Data from" translationStatus="7"/>
+  <Label id="AccountReceivables_SyncFallback" text="Could not update. Data from" translationStatus="7"/>
+  <Label id="AccountReceivables_EmptyOnline" text="There are no unsettled documents." translationStatus="7"/>
+  <Label id="AccountReceivables_EmptyOffline" text="No connection. There are no unsettled documents in the local data." translationStatus="7"/>
+  <Label id="" text="Could not update and there is no local data for this customer." translationStatus="7"/>
+  <Label id="AccountReceivables_RefreshFailed" text="Could not query ArtSoft. Showing the latest available data." translationStatus="7"/>
+  <Label id="AccountReceivables_RefreshOffline" text="No connection. Querying ArtSoft requires internet; showing local data." translationStatus="7"/>
+  <Label id="AccountReceivables_SectionEmpty" text="No open documents." translationStatus="7"/>
+  <Label id="AccountReceivables_NoParent" text="No client account (headquarters) linked." translationStatus="7"/>
+  <Label id="AccountReceivables_Documents" text="documents" translationStatus="7"/>
+  <Label id="AccountReceivables_Open" text="Open" translationStatus="7"/>
+  <Label id="AccountReceivables_Overdue" text="Overdue" translationStatus="7"/>
   
 </Global>

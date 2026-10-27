@@ -8,6 +8,7 @@
     <SimpleProperty name="amount" type="DomMoney" dataSourceProperty="amount" />
     <SimpleProperty name="amountOpen" type="DomMoney" dataSourceProperty="amountOpen" />
     <SimpleProperty name="invoiceStatus" type="DomText" dataSourceProperty="invoiceStatus" />
+    <SimpleProperty name="businessModified" type="DomDateTime" dataSourceProperty="businessModified" />
     <SimpleProperty name="accountReceivableIcon" type="DomString" />
     <SimpleProperty name="externalIdInvoiceInfo" type="DomText" />
     <SimpleProperty name="dueDateText" type="DomText" />

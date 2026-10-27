@@ -176,6 +176,15 @@ var loadParentAccounts = function (result) {
   }
 };
 
+// GASO: branches show the account statement of their client account (GASO_ParentClient__c),
+// so its receivables must be available offline.
+var loadGasoParentClientReceivables = function (result) {
+  var idsOfParentClients = me.removeLocalIDs(me.getPropertyValuesFromArray(result.GasoParentClientAccounts, "AccountId"));
+  if (idsOfParentClients.length > 0) {
+    request.addRequest('NFT_Account_Receivable', idsOfParentClients);
+  }
+};
+
 //Load DSD-Order Data (Order items of orders for tours in 3 day range + assortment of the order customers)
 var loadDSDOrderData = function (result) {
   idsOfRelevantDSDOrders = me.removeLocalIDs(me.getPropertyValuesFromArray(result.AssignedTourOrders, "Id"));
@@ -292,6 +301,12 @@ var promise = when.resolve();
               dataSourceMethod: "ParentAccounts",
               jsonParams: {},
               uniqueReturnKey: "ParentAccounts"
+            },
+            {
+              dataSource: "DsBoSfReplicationCallbacks",
+              dataSourceMethod: "GasoParentClientAccounts",
+              jsonParams: {},
+              uniqueReturnKey: "GasoParentClientAccounts"
             }
           ];
 
@@ -307,6 +322,7 @@ var promise = when.resolve();
                 loadDSDDependentCustomers(result);
                 loadAttachments(result);
                 loadParentAccounts(result);
+                loadGasoParentClientReceivables(result);
                 loadTourInventories(result);
                 if(runningInHybridMode) {
                   promises.push(loadDSDVisitData(result));
@@ -323,6 +339,7 @@ var promise = when.resolve();
                 loadAttachments(result);
                 loadRelevantCustomerContract(result);
                 loadParentAccounts(result);
+                loadGasoParentClientReceivables(result);
               }
 
               return when.all(promises)
