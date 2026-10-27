@@ -39,9 +39,11 @@
  * @async
  * @namespace CUSTOM
  * @param {String} customerPKey
+ * @param {String} parentPKey
+ * @param {LoAccountReceivables} parentList
  * @returns promise
  */
-function myGasoLoadForAccountAsync(customerPKey){
+function myGasoLoadForAccountAsync(customerPKey, parentPKey, parentList){
     var me = this;
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                           //
@@ -50,22 +52,119 @@ function myGasoLoadForAccountAsync(customerPKey){
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     var promise;
+    // Branches also show the receivables of their client account (GASO_ParentClient__c) in parentList.
+    var hasParent = Utils.isDefined(parentPKey) && !Utils.isEmptyString(parentPKey) &&
+        parentPKey !== " " && parentPKey !== customerPKey;
+    if (Utils.isDefined(parentList)) {
+        parentList.removeAllItems();
+        // Read by myGasoSummaryText to tell "no client account" apart from "nothing open".
+        parentList.noParent = !hasParent;
+    }
     if (!Utils.isDefined(customerPKey) || Utils.isEmptyString(customerPKey)) {
         me.removeAllItems();
-        promise = when.resolve();
+        promise = when.resolve("");
     } else {
         promise = DeviceManager.isOnlineAsync()
         .then(function (isOnline) {
-            if (Utils.isTrue(isOnline)) {
-                var request = new BatchNftRequest();
-                request.addRequest("NFT_Account_Receivable", [customerPKey]);
-                // Wait for the records to reach SQLite before querying the datasource.
-                // A failed download must propagate instead of looking like an empty account.
-                return Facade.requestBatchNftDataAndWait(request);
+            if (!Utils.isTrue(isOnline)) {
+                me.dataSource = "offline";
+                return;
+            }
+            var request = new BatchNftRequest();
+            request.addRequest("NFT_Account_Receivable", hasParent ? [customerPKey, parentPKey] : [customerPKey]);
+            // Wait for the records to reach SQLite before querying the datasource.
+            return Facade.requestBatchNftDataAndWait(request)
+            .then(function () {
+                me.dataSource = "online";
+            })
+            // Download failed: show the records from the last sync and flag it,
+            // so the UI never presents an empty list as "no open documents".
+            .catch(function () {
+                me.dataSource = "fallback";
+            });
+        })
+        .then(function () {
+            if (hasParent && Utils.isDefined(parentList)) {
+                return parentList.calculateAccountReceivablesForCard(parentPKey);
             }
         })
         .then(function () {
             return me.calculateAccountReceivablesForCard(customerPKey);
+        })
+        // Latest due date first (the datasource is shared with the visit card, so sort here).
+        .then(function () {
+            var byDueDateDesc = function (a, b) {
+                var dueA = a.getDueDate() || "";
+                var dueB = b.getDueDate() || "";
+                if (dueA !== dueB) {
+                    return dueA < dueB ? 1 : -1;
+                }
+                var receiptA = a.getReceiptDate() || "";
+                var receiptB = b.getReceiptDate() || "";
+                return receiptA === receiptB ? 0 : (receiptA < receiptB ? 1 : -1);
+            };
+            [me, parentList].forEach(function (list) {
+                if (Utils.isDefined(list)) {
+                    var sorted = list.getAllItems().slice().sort(byDueDateDesc);
+                    list.removeAllItems();
+                    list.addItems(sorted);
+                }
+            });
+        })
+        // Build the status line shown above the lists (returned to the process context).
+        .then(function () {
+            var items = me.getAllItems().concat(Utils.isDefined(parentList) ? parentList.getAllItems() : []);
+            if (items.length === 0) {
+                // Only "online" may state there is nothing to pay; the others are not up to date.
+                return Localization.resolve({
+                    online: "AccountReceivables_EmptyOnline",
+                    offline: "AccountReceivables_EmptyOffline",
+                    fallback: "AccountReceivables_EmptyFallback"
+                }[me.dataSource]);
+            }
+            // Due-date alerts: red when overdue, yellow when due within the next 7 days.
+            var today = Utils.createAnsiDateToday();
+            var inSevenDays = Utils.addDays2AnsiDate(today, 7);
+            items.forEach(function (item) {
+                var dueDate = item.getDueDate();
+                if (!Utils.isDefined(dueDate) || Utils.isEmptyString(dueDate) || dueDate === Utils.getMinDate()) {
+                    item.setAccountReceivableIcon(" ");
+                } else if (dueDate < today) {
+                    item.setAccountReceivableIcon("WarningTriangle_IC");
+                } else if (dueDate <= inSevenDays) {
+                    item.setAccountReceivableIcon("WarningCircle_IC");
+                } else {
+                    item.setAccountReceivableIcon(" ");
+                }
+            });
+
+            var lastSync = null;
+            items.forEach(function (item) {
+                var modified = item.getBusinessModified();
+                if (Utils.isDefined(modified) && (lastSync === null || modified > lastSync)) {
+                    lastSync = modified;
+                }
+            });
+            var date = "";
+            if (lastSync !== null) {
+                // The status line must never break the tab: show the raw value if it cannot be formatted.
+                try {
+                    date = " " + Localization.localize(Utils.convertAnsiDateTime2AnsiDate(lastSync), "date") +
+                        " " + Localization.localize(lastSync, "time");
+                } catch (e) {
+                    date = " " + lastSync;
+                }
+            }
+            return Localization.resolve({
+                online: "AccountReceivables_SyncOnline",
+                offline: "AccountReceivables_SyncOffline",
+                fallback: "AccountReceivables_SyncFallback"
+            }[me.dataSource]) + date;
+        })
+        // Kept so a refresh tapped while another one runs can return the current status line.
+        .then(function (syncInfo) {
+            me.lastSyncInfo = syncInfo;
+            return syncInfo;
         });
     }
 

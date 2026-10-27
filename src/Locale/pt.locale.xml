@@ -843,6 +843,20 @@
       <Label id="MessageBox_Title_Attention" text="Pedimos a sua atenção." translationStatus="7"/>
       <!-- Quantity Suggestion -->
       <Label id="Quantity_Suggestion_Prefix" text="Qtd sugerida" translationStatus="7"/>
+      <!-- GASO Account Statement -->
+      <Label id="AccountReceivables_SyncOnline" text="Atualizado em" translationStatus="7"/>
+      <Label id="AccountReceivables_SyncOffline" text="Sem ligação. Dados de" translationStatus="7"/>
+      <Label id="AccountReceivables_SyncFallback" text="Não foi possível atualizar. Dados de" translationStatus="7"/>
+      <Label id="AccountReceivables_EmptyOnline" text="Não existem documentos não saldados." translationStatus="7"/>
+      <Label id="AccountReceivables_EmptyOffline" text="Sem ligação. Não há documentos não saldados nos dados locais." translationStatus="7"/>
+      <Label id="AccountReceivables_EmptyFallback" text="Não foi possível atualizar e não há dados locais deste cliente." translationStatus="7"/>
+      <Label id="AccountReceivables_RefreshFailed" text="Não foi possível consultar o ArtSoft. São mostrados os últimos dados disponíveis." translationStatus="7"/>
+      <Label id="AccountReceivables_RefreshOffline" text="Sem ligação. A consulta ao ArtSoft precisa de internet; são mostrados os dados locais." translationStatus="7"/>
+      <Label id="AccountReceivables_SectionEmpty" text="Sem documentos em aberto." translationStatus="7"/>
+      <Label id="AccountReceivables_NoParent" text="Sem conta cliente (sede) associada." translationStatus="7"/>
+      <Label id="AccountReceivables_Documents" text="documentos" translationStatus="7"/>
+      <Label id="AccountReceivables_Open" text="Em aberto" translationStatus="7"/>
+      <Label id="AccountReceivables_Overdue" text="Vencido" translationStatus="7"/>
     </Global>
     <UserInterfaceContracts>
       <UserInterface id="ApplicationDashboardUI">
@@ -1056,6 +1070,12 @@
         <Label id="TimeSlotGroupId" text="Faixa de tempo" translationStatus="7"/>
         <Label id="TimeThruTimeSlot" text="Hora de fim" translationStatus="7"/>
         <Label id="GASOAccountStatementId" text="Conta corrente" translationStatus="7"/>
+        <Label id="AccountReceivablesSyncTitleId" text="Última atualização" translationStatus="7"/>
+        <Label id="AccountReceivablesBranchTitleId" text="Esta conta" translationStatus="7"/>
+        <Label id="AccountReceivablesParentTitleId" text="Conta cliente (sede)" translationStatus="7"/>
+        <Label id="RefreshAccountReceivablesId" text="Atualizar" translationStatus="7"/>
+        <Label id="AccountReceivablesStatusLabelId" text="Estado" translationStatus="7"/>
+        <Label id="AccountReceivablesSummaryLabelId" text="Resumo" translationStatus="7"/>
         <Label id="AmountLabelId" text="Valor" translationStatus="7"/>
         <Label id="AmountOpenLabelId" text="Em aberto" translationStatus="7"/>
         <Label id="DueDateLabelId" text="Vencimento" translationStatus="7"/>
@@ -1230,6 +1250,12 @@
         <Label id="TimeSlotGroupId" text="Faixa de tempo" translationStatus="7"/>
         <Label id="TimeThruTimeSlot" text="Hora de fim" translationStatus="7"/>
         <Label id="GASOAccountStatementId" text="Conta corrente" translationStatus="7"/>
+        <Label id="AccountReceivablesSyncTitleId" text="Última atualização" translationStatus="7"/>
+        <Label id="AccountReceivablesBranchTitleId" text="Esta conta" translationStatus="7"/>
+        <Label id="AccountReceivablesParentTitleId" text="Conta cliente (sede)" translationStatus="7"/>
+        <Label id="RefreshAccountReceivablesId" text="Atualizar" translationStatus="7"/>
+        <Label id="AccountReceivablesStatusLabelId" text="Estado" translationStatus="7"/>
+        <Label id="AccountReceivablesSummaryLabelId" text="Resumo" translationStatus="7"/>
         <Label id="AmountLabelId" text="Valor" translationStatus="7"/>
         <Label id="AmountOpenLabelId" text="Em aberto" translationStatus="7"/>
         <Label id="DueDateLabelId" text="Vencimento" translationStatus="7"/>

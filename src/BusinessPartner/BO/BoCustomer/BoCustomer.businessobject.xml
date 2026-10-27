@@ -30,6 +30,7 @@
     <SimpleProperty name="operatingHoursId" type="DomPKey" dataSourceProperty="operatingHoursId" />
     <SimpleProperty name="emailEditable" type="DomBool" storable="false" dataSourceProperty="emailEditable" />
     <SimpleProperty name="gasoVat" type="DomString" storable="false" dataSourceProperty="gasoVat" />
+    <SimpleProperty name="gasoParentClient" type="DomPKey" storable="false" dataSourceProperty="gasoParentClient" />
   </SimpleProperties>
   <ObjectLookups>
     <!-- luCustomerTradeOrg: load immediate -->

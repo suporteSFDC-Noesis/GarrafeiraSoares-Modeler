@@ -8,13 +8,16 @@
     <Attribute name="amount" table="Account_Receivable__c" column="Amount__c" />
     <Attribute name="amountOpen" table="Account_Receivable__c" column="Amount_Open__c" />
     <Attribute name="invoiceStatus" table="Account_Receivable__c" column="Invoice_Status__c" />
+    <Attribute name="businessModified" table="Account_Receivable__c" column="LastModifiedDate" />
   </Attributes>
   <Entities>
     <Entity name="Account_Receivable__c" alias="" idAttribute="Id" />
   </Entities>
   <QueryCondition><![CDATA[
 			Account_Receivable__c.Account__c = #customerPKey#
-		]]></QueryCondition>
+      AND Account_Receivable__c.Amount_Open__c IS NOT NULL
+      AND Account_Receivable__c.Amount_Open__c <> 0
+  ]]></QueryCondition>
   <OrderCriteria>
     <OrderCriterion entity="Account_Receivable__c" attribute="Receipt_Date__c" direction="ASC" />
     <OrderCriterion entity="Account_Receivable__c" attribute="External_Id__c" direction="ASC" />

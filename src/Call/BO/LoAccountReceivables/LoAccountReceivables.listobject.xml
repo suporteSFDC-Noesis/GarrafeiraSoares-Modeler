@@ -12,6 +12,8 @@
     <Method name="saveAsync" />
     <Method name="calculateAccountReceivablesForCard" />
     <Method name="myGasoLoadForAccountAsync" />
+    <Method name="myGasoRefreshFromArtSoftAsync" />
+    <Method name="myGasoSummaryText" />
     <Method name="prepareAccountReceivablesCardInfo" />
   </Methods>
 </ListObject>

@@ -7,6 +7,10 @@
         <Declaration name="CustomerRelationList" type="LoBpaRelation" />
         <Declaration name="CustomerDetail" type="BoCustomer" />
         <Declaration name="accountReceivableList" type="LoAccountReceivables" />
+        <Declaration name="accountReceivableParentList" type="LoAccountReceivables" />
+        <Declaration name="accountReceivableSyncInfo" type="String" />
+        <Declaration name="accountReceivableBranchSummary" type="String" />
+        <Declaration name="accountReceivableParentSummary" type="String" />
         <Declaration name="ContactPartnerDetail" type="BoContactPartner" />
         <Declaration name="POSDetail" type="BoPos" />
         <Declaration name="PosName" type="String" />
@@ -136,6 +140,7 @@
           <!-- Operating Hour / Time Slot Handling -->
           <Event name="timeSlotSelected" action="LoadTimeSlot" />
           <Event name="newTimeSlot" action="CreateTimeSlot" />
+          <Event name="refreshAccountReceivables" action="refreshAccountReceivablesFromArtSoft" />
           <Event name="acceptTimeSlotChanges" action="ValidateTimeSlot" />
           <Event name="timeSlotContextMenuOpened" action="LoadTimeSlotContextMenu" />
           <Event name="timeSlotContextMenuItemSelected" action="ContextMenuResultDecision" />
@@ -332,13 +337,40 @@
       </Action>
       <Action name="createAccountReceivablesList" actionType="CREATE" type="LoAccountReceivables">
         <Return name="ProcessContext::accountReceivableList" />
+        <TransitionTo action="createAccountReceivablesParentList" />
+      </Action>
+      <Action name="createAccountReceivablesParentList" actionType="CREATE" type="LoAccountReceivables">
+        <Return name="ProcessContext::accountReceivableParentList" />
         <TransitionTo action="loadAccountReceivablesList" />
       </Action>
       <Action name="loadAccountReceivablesList" actionType="LOGIC"
               call="ProcessContext::accountReceivableList.myGasoLoadForAccountAsync">
         <Parameters>
           <Input name="customerPKey" value="ProcessContext::customerDetail.pKey" />
+          <Input name="parentPKey" value="ProcessContext::customerDetail.gasoParentClient" />
+          <Input name="parentList" value="ProcessContext::accountReceivableParentList" />
         </Parameters>
+        <Return name="ProcessContext::accountReceivableSyncInfo" />
+        <TransitionTo action="loadAccountReceivablesBranchSummary" />
+      </Action>
+      <Action name="refreshAccountReceivablesFromArtSoft" actionType="LOGIC"
+              call="ProcessContext::accountReceivableList.myGasoRefreshFromArtSoftAsync">
+        <Parameters>
+          <Input name="customerPKey" value="ProcessContext::customerDetail.pKey" />
+          <Input name="parentPKey" value="ProcessContext::customerDetail.gasoParentClient" />
+          <Input name="parentList" value="ProcessContext::accountReceivableParentList" />
+        </Parameters>
+        <Return name="ProcessContext::accountReceivableSyncInfo" />
+        <TransitionTo action="loadAccountReceivablesBranchSummary" />
+      </Action>
+      <Action name="loadAccountReceivablesBranchSummary" actionType="LOGIC"
+              call="ProcessContext::accountReceivableList.myGasoSummaryText">
+        <Return name="ProcessContext::accountReceivableBranchSummary" />
+        <TransitionTo action="loadAccountReceivablesParentSummary" />
+      </Action>
+      <Action name="loadAccountReceivablesParentSummary" actionType="LOGIC"
+              call="ProcessContext::accountReceivableParentList.myGasoSummaryText">
+        <Return name="ProcessContext::accountReceivableParentSummary" />
       </Action>
       <!-- Map Tab -->
       <Action name="GetMainAddress" actionType="LOGIC" call="ProcessContext::CustomerDetail.LoCustomerAddress.getMainAddress">

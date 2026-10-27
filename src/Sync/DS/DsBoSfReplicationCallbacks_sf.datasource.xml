@@ -330,6 +330,13 @@
         			sqlStmt    += "FROM Account_Trade_Org_Hierarchy__c ";
                     return Utils.replaceMacrosParam(sqlStmt, sqlParams);
       ]]></ParentAccounts>
+      <GasoParentClientAccounts><![CDATA[
+      				var sqlParams = {};
+                    var sqlStmt = "SELECT DISTINCT Account.GASO_ParentClient__c as AccountId ";
+        			sqlStmt    += "FROM Account ";
+        			sqlStmt    += "WHERE Account.GASO_ParentClient__c IS NOT NULL AND Account.GASO_ParentClient__c <> ' ' AND Account.GASO_ParentClient__c <> '' ";
+                    return Utils.replaceMacrosParam(sqlStmt, sqlParams);
+      ]]></GasoParentClientAccounts>
       <PromotionsReferencedByOrderItems><![CDATA[
 					var orderPKey = Utils.convertForDBParam(jsonParams.orderPKey, 'DomPKey');
 					var sqlParams = {orderPKey};           			
