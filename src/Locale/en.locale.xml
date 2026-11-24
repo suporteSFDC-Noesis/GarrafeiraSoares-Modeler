@@ -2324,6 +2324,9 @@
         <Label id="UnitTypeGTINLabel" text="Unit / GTIN" translationStatus="7"/>
         <Label id="CndCpVolumeLabel" text="Volume" translationStatus="7"/>
         <Label id="CndCpWeightLabel" text="Weight" translationStatus="7"/>
+        <Label id="WeightVolumeLabel" text="Weight/Volume" translationStatus="7"/>
+        <Label id="PiecesParentSmallestLabel" text="Pcs parent/smallest" translationStatus="7"/>
+        <Label id="SortLabel" text="Sort" translationStatus="7"/>
         <Label id="GTINLabel" text="GTIN:" translationStatus="7"/>
         <Label id="EANLabel" text="GTIN" translationStatus="7"/>
         <Label id="DateLabel" text="Date" translationStatus="7"/>
@@ -3866,16 +3869,25 @@
       <Process id="Order.AddProductLookupProcess"/>
       <Process id="Order.AddProductProcess"/>
       <Process id="Order.CreateNewProcess">
+        <Label id="GasoOrderBlockedStatus" text="The customer is not Approved or Approved without Credit. The order cannot be created." translationStatus="7"/>
+        <Label id="GasoOrderBlockedFinancial" text="The customer financial status does not allow opening an order." translationStatus="7"/>
+        <Label id="GasoOrderBlockedNoPrice" text="The customer has no negotiated prices, price table or document series. The order cannot be created." translationStatus="7"/>
+        <Label id="GasoUseDraftOrder" text="This customer already has a draft order. Do you want to use it? If you choose No, the draft is deleted and a new order is opened." translationStatus="7"/>
         <Label id="CasConfirmOrderDataNotOnDevice" text="The new order cannot be opened due to missing data. Please wait for the synchronisation process to complete." translationStatus="7"/>
       </Process>
       <Process id="Order.CopyProcess">
         <Label id="CasTemplateNotValidForCopy" text="The order cannot be copied because the template is no longer valid for the current user." translationStatus="7"/>
+        <Label id="GasoOrderBlockedStatus" text="The customer is not Approved or Approved without Credit. The order cannot be created." translationStatus="7"/>
+        <Label id="GasoOrderBlockedFinancial" text="The customer financial status does not allow opening an order." translationStatus="7"/>
+        <Label id="GasoOrderBlockedNoPrice" text="The customer has no negotiated prices, price table or document series. The order cannot be created." translationStatus="7"/>
+        <Label id="GasoCopyReplacesDraft" text="This customer already has a draft order. To copy, the draft is deleted. Do you want to continue?" translationStatus="7"/>
       </Process>
       <Process id="Order.CancelWizardProcess">
         <Label id="CasConfirmCancelMsg" text="Do you want to cancel this document?" translationStatus="7"/>
       </Process>
       <Process id="Order.CreateNewProcess"/>
       <Process id="Order.CreateNewWizardProcess">
+        <Label id="GasoNoOrderTemplate" text="No order type is available for you. The order cannot be created." translationStatus="7"/>
         <Label id="CasMessageNoOrdererRole" text="You can’t create orders for a customer who isn’t an orderer. Your Salesforce admin can help with that." translationStatus="7"/>
       </Process>
       <Process id="Order.CreateNewWithCustomerProcess"/>
@@ -4161,6 +4173,9 @@
         <Label id="CasSdoMainTotalValueTooSmall" text="The total value #totalValue# of the Order is lesser than the minimum value #minValue# of the Order template." translationStatus="7"/>
         <Label id="CasSdoMainProductItemMetaNotUnique" text="The product(s) #summary# has/have been assigned more than once using the same item template." translationStatus="7"/>
         <Label id="CasSdoCommitDateGreaterDeliveryDate" text="The Order date must be lesser than or equal to delivery date." translationStatus="7"/>
+        <Label id="GasoDueDateEmpty" text="Please enter the due date." translationStatus="7"/>
+        <Label id="GasoDueDateBeforeToday" text="The due date cannot be earlier than today." translationStatus="7"/>
+        <Label id="GasoDueDateTooLarge" text="The due date must be within the payment term (#days# days): #maxDate# at the latest." translationStatus="7"/>
         <Label id="CasSdoDeliveryDateNull" text="Please enter a delivery date." translationStatus="7"/>
         <Label id="CasSdoMainDeliveryDateTooLarge" text="Please choose a delivery date during the next #days# days." translationStatus="7"/>
         <Label id="CasSdoMainDeliveryDateTooSmall" text="Choose a delivery date that is at least #days# workdays in the future." translationStatus="7"/>

@@ -9,5 +9,6 @@
     <SimpleProperty name="eAN" type="DomPrdNumber" dataSourceProperty="eAN" />
     <SimpleProperty name="empties" type="DomText" dataSourceProperty="empties" />
     <SimpleProperty name="emptiesQuantity" type="DomDecimal" dataSourceProperty="emptiesQuantity" />
+    <SimpleProperty name="sort" type="DomSort" storable="false" dataSourceProperty="sort" />
   </SimpleProperties>
 </ListItem>

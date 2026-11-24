@@ -92,6 +92,12 @@ if(Utils.isDefined(loSuggestedQuantity)) {
   me.displayQuantitySuggestion(item, loSuggestedQuantity, orderMeta);
 }
 
+//GASO: origem do preço gravada no pricingInfo5 pelo cálculo (1 = C102, 2 = C302, 3 = Série de Documento)
+var gasoPriceOrigin = { "1": "Preço Negociado (C102)", "2": "Tabela do Cliente (C302)", "3": "Série de Documento" }[String(parseInt(item.getPricingInfo5(), 10))];
+if (Utils.isDefined(gasoPriceOrigin)) {
+  unitInformation = (Utils.isEmptyString(unitInformation) ? "" : unitInformation + " | ") + "Origem: " + gasoPriceOrigin;
+}
+item.setGasoPriceOriginText(Utils.isDefined(gasoPriceOrigin) ? gasoPriceOrigin : "");
 item.setOrderUnitInformation(orderUnitInformation);
 item.setUnitInformation(unitInformation);
 

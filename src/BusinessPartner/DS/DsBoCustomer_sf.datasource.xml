@@ -29,6 +29,19 @@
     <Attribute name="operatingHoursId" table="Account" column="OperatingHoursId" />
     <Attribute name="gasoVat" table="Account" column="GASO_VAT__c" />
     <Attribute name="gasoParentClient" table="Account" column="GASO_ParentClient__c" />
+    <Attribute name="gasoFinantialStatus" table="Account" column="GASO_FinantialStatus__c" />
+    <DerivedAttribute name="gasoFinantialStatusText" value="CASE Account.GASO_FinantialStatus__c WHEN '0' THEN 'Plafond Rigoroso' WHEN '1' THEN 'Registo Inativo' WHEN '2' THEN 'Plafond Confirmado' WHEN '3' THEN 'Plafond Rigoroso' WHEN '4' THEN 'Conta Confirmada' WHEN '5' THEN 'Conta em Alerta' WHEN '6' THEN 'Conta Cortada' WHEN '7' THEN 'Contencioso' WHEN '8' THEN 'Plafond Rigoroso' WHEN '9' THEN 'Conta Cortada' WHEN '11' THEN 'Conta em Alerta' ELSE 'Normal' END" />
+    <Attribute name="gasoPaymentCondition" table="Account" column="GASO_PaymentCondition__c" />
+    <DerivedAttribute name="gasoPaymentConditionText" value="CASE Account.GASO_PaymentCondition__c WHEN '1' THEN 'P.P.' WHEN '2' THEN '30 DIAS' WHEN '3' THEN '45 DIAS' WHEN '4' THEN '45 DIAS' WHEN '5' THEN '60 DIAS' WHEN '6' THEN '90 DIAS' WHEN '7' THEN '7 DIAS' WHEN '15' THEN '15 DIAS' WHEN '20' THEN 'P.P.*' WHEN '0' THEN '0' ELSE '' END" />
+    <DerivedAttribute name="gasoPaymentDays" value="CASE Account.GASO_PaymentCondition__c WHEN '2' THEN 30 WHEN '3' THEN 45 WHEN '4' THEN 45 WHEN '5' THEN 60 WHEN '6' THEN 90 WHEN '7' THEN 7 WHEN '15' THEN 15 WHEN '1' THEN 0 WHEN '20' THEN 0 WHEN '0' THEN 0 ELSE -1 END" />
+    <Attribute name="gasoLiableBalance" table="Account" column="GASO_LiableBalance__c" />
+    <Attribute name="gasoCreditLimit" table="Account" column="GASO_CreditLimit__c" />
+    <Attribute name="gasoStatus" table="Account" column="GASO_Status__c" />
+    <DerivedAttribute name="gasoStatusText" value="CASE Account.GASO_Status__c WHEN 'New' THEN 'Novo' WHEN 'InApproval' THEN 'Em Aprovação' WHEN 'ApprovedWithoutCredit' THEN 'Aprovado sem Crédito' WHEN 'Approved' THEN 'Aprovado' WHEN 'Rejected' THEN 'Rejeitado' WHEN 'Inactive' THEN 'Inativo' ELSE '' END" />
+    <Attribute name="gasoMobilePhone" table="Account" column="GASO_MobilePhone__c" />
+    <Attribute name="gasoIdentifier" table="Account" column="GASO_Identifier__c" />
+    <Attribute name="gasoArtsoftNrFicha" table="Account" column="GASO_ArtsoftNrFicha__c" />
+    <DerivedAttribute name="gasoShippingAddress" value="TRIM(IFNULL(Account.ShippingStreet, '') || ', ' || IFNULL(Account.ShippingPostalCode, '') || ' ' || IFNULL(Account.ShippingCity, ''), ', ')" />
     <DerivedAttribute name="emailEditable" value="'0'" />
   </Attributes>
   <Entities>

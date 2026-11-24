@@ -31,6 +31,19 @@
     <SimpleProperty name="emailEditable" type="DomBool" storable="false" dataSourceProperty="emailEditable" />
     <SimpleProperty name="gasoVat" type="DomString" storable="false" dataSourceProperty="gasoVat" />
     <SimpleProperty name="gasoParentClient" type="DomPKey" storable="false" dataSourceProperty="gasoParentClient" />
+    <SimpleProperty name="gasoFinantialStatus" type="DomString" storable="false" dataSourceProperty="gasoFinantialStatus" />
+    <SimpleProperty name="gasoFinantialStatusText" type="DomString" storable="false" dataSourceProperty="gasoFinantialStatusText" />
+    <SimpleProperty name="gasoPaymentCondition" type="DomString" storable="false" dataSourceProperty="gasoPaymentCondition" />
+    <SimpleProperty name="gasoPaymentConditionText" type="DomString" storable="false" dataSourceProperty="gasoPaymentConditionText" />
+    <SimpleProperty name="gasoPaymentDays" type="DomInteger" storable="false" dataSourceProperty="gasoPaymentDays" />
+    <SimpleProperty name="gasoLiableBalance" type="DomDecimal" storable="false" dataSourceProperty="gasoLiableBalance" />
+    <SimpleProperty name="gasoCreditLimit" type="DomDecimal" storable="false" dataSourceProperty="gasoCreditLimit" />
+    <SimpleProperty name="gasoStatus" type="DomString" storable="false" dataSourceProperty="gasoStatus" />
+    <SimpleProperty name="gasoStatusText" type="DomString" storable="false" dataSourceProperty="gasoStatusText" />
+    <SimpleProperty name="gasoMobilePhone" type="DomString" storable="false" dataSourceProperty="gasoMobilePhone" />
+    <SimpleProperty name="gasoIdentifier" type="DomString" storable="false" dataSourceProperty="gasoIdentifier" />
+    <SimpleProperty name="gasoArtsoftNrFicha" type="DomString" storable="false" dataSourceProperty="gasoArtsoftNrFicha" />
+    <SimpleProperty name="gasoShippingAddress" type="DomString" storable="false" dataSourceProperty="gasoShippingAddress" />
   </SimpleProperties>
   <ObjectLookups>
     <!-- luCustomerTradeOrg: load immediate -->

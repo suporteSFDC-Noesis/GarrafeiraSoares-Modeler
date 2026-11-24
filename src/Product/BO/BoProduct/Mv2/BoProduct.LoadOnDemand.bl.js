@@ -51,15 +51,34 @@ function loadOnDemand(loadMode){
     
 var promise = when.resolve();
 
+// GASO: loLogistics is loaded with the product (LoadImmediate), so the first time the tab
+// is opened online download the product's units of measure (NFT) and reload the list.
+// Offline or on download failure the list keeps the data from the last sync.
+if (loadMode === "Logistics" && me.gasoUomRefreshed !== true) {
+  me.gasoUomRefreshed = true;
+  me.setLoLogistics(null);
+  promise = DeviceManager.isOnlineAsync()
+    .then(function (isOnline) {
+    if (Utils.isTrue(isOnline)) {
+      var request = new BatchNftRequest();
+      request.addRequest("NFT_Unit_of_Measure", [me.getPKey()]);
+      return Facade.requestBatchNftDataAndWait(request)
+        .catch(function () {});
+    }
+  });
+}
+
 if (loadMode === "Logistics" && !Utils.isDefined(me.getLoLogistics())) {
-  promise = BoFactory.loadObjectByParamsAsync(LO_LOGISTICS, {
-    params: [
-      {
-        field: "ProductPKey",
-        value: me.getPKey(),
-        operator: "EQ"
-      }
-    ]
+  promise = promise.then(function () {
+    return BoFactory.loadObjectByParamsAsync(LO_LOGISTICS, {
+      params: [
+        {
+          field: "ProductPKey",
+          value: me.getPKey(),
+          operator: "EQ"
+        }
+      ]
+    });
   })
     .then(function (loLogistics) {
     if (Utils.isDefined(loLogistics)) {

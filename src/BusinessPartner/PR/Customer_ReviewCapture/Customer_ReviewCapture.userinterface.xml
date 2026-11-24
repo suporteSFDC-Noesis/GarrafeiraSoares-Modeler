@@ -320,6 +320,65 @@
                 </Events>
               </ImageButton>
             </Merger>
+            <InputArea name="GASOMobilePhone" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOMobilePhoneId" defaultLabel="Telemóvel" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoMobilePhone" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOShippingAddress" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOShippingAddressId" defaultLabel="Morada de Envio" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoShippingAddress" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+          </GroupElement>
+          <GroupElement name="GASOCommercialGroup">
+            <Bindings>
+              <Resource target="Title" type="Label" id="GASOCommercialGroupId" defaultLabel="Dados Comerciais" />
+            </Bindings>
+            <InputArea name="GASOStatus" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOStatusId" defaultLabel="Estado" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoStatusText" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOFinantialStatus" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOFinantialStatusId" defaultLabel="Situação Financeira" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoFinantialStatusText" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOPaymentCondition" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOPaymentConditionId" defaultLabel="Cond. Pagamento" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoPaymentConditionText" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOLiableBalance" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOLiableBalanceId" defaultLabel="Saldo Resp. Cliente" />
+                <Binding target="Value" type="Decimal" binding="ProcessContext::CustomerDetail.gasoLiableBalance" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOCreditLimit" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOCreditLimitId" defaultLabel="Plafond" />
+                <Binding target="Value" type="Decimal" binding="ProcessContext::CustomerDetail.gasoCreditLimit" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOIdentifier" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOIdentifierId" defaultLabel="Id ArtSoft" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoIdentifier" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
+            <InputArea name="GASOArtsoftNrFicha" editable="false">
+              <Bindings>
+                <Resource target="Label" type="Label" id="GASOArtsoftNrFichaId" defaultLabel="Nr. Ficha ArtSoft" />
+                <Binding target="Value" binding="ProcessContext::CustomerDetail.gasoArtsoftNrFicha" bindingMode="ONE_WAY" />
+              </Bindings>
+            </InputArea>
           </GroupElement>
           <GroupElement name="ClassificationGroup">
             <Bindings>

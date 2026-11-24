@@ -132,6 +132,11 @@
     <SimpleProperty name="pricingInfo8" type="DomDecimal" dataSourceProperty="pricingInfo8"/>
     <SimpleProperty name="pricingInfo9" type="DomDecimal" dataSourceProperty="pricingInfo9"/>
     <SimpleProperty name="pricingInfo10" type="DomDecimal" dataSourceProperty="pricingInfo10"/>
+    <SimpleProperty name="gasoDueDate" type="DomDate" dataSourceProperty="gasoDueDate"/>
+    <SimpleProperty name="gasoExternalId" type="DomString" dataSourceProperty="gasoExternalId"/>
+    <SimpleProperty name="gasoExtendedId" type="DomString" dataSourceProperty="gasoExtendedId"/>
+    <SimpleProperty name="gasoSyncStatus" type="DomString" dataSourceProperty="gasoSyncStatus"/>
+    <SimpleProperty name="gasoErrorMessage" type="DomString" dataSourceProperty="gasoErrorMessage"/>
     <SimpleProperty name="isNextStateRelease" type="DomBool"/>
     <SimpleProperty name="isOrderPaymentRelevant" type="DomBool"/>
     <SimpleProperty name="isPaymentCollected" type="DomBool">
@@ -348,6 +353,7 @@
   <Validations>
     <Validation name="validateOrderValue"/>
     <Validation name="validateDeliveryDate"/>
+    <Validation name="myValidateGasoDueDate"/>
     <Validation name="validateOrderItem"/>
     <Validation name="validateOrder"/>
     <Validation name="validateInventory"/>

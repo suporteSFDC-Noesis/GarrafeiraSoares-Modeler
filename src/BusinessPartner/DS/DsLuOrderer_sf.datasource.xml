@@ -11,6 +11,7 @@
     <Attribute name="payerValidFrom" table="Account_Extension__c" column="Payer_Role_Valid_From__c" />
     <Attribute name="payerValidThru" table="Account_Extension__c" column="Payer_Role_Valid_Thru__c" />
     <Attribute name="paymentMode" table="Account_Extension__c" column="Payment_Mode__c" />
+    <DerivedAttribute name="gasoPaymentDays" value="CASE Account.GASO_PaymentCondition__c WHEN '2' THEN 30 WHEN '3' THEN 45 WHEN '4' THEN 45 WHEN '5' THEN 60 WHEN '6' THEN 90 WHEN '7' THEN 7 WHEN '15' THEN 15 WHEN '1' THEN 0 WHEN '20' THEN 0 WHEN '0' THEN 0 ELSE -1 END" />
   </Attributes>
   <Entities>
     <Entity name="Account" alias="" idAttribute="Id" />

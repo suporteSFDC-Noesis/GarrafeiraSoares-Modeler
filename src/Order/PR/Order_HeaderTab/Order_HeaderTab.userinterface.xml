@@ -129,6 +129,37 @@
               <Binding target="Value" binding="ProcessContext::MainBO.deliveryDate" bindingMode="TWO_WAY" />
             </Bindings>
           </DatePickerField>
+          <!-- GASO: data de vencimento preenchida na criação e editável dentro do prazo (myValidateGasoDueDate); campos ArtSoft só leitura -->
+          <DatePickerField name="GASODueDate" dateVisible="true" timeVisible="false">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="Data Vencimento" id="GASODueDateId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.gasoDueDate" bindingMode="TWO_WAY" />
+            </Bindings>
+          </DatePickerField>
+          <InputArea name="GASOExternalId" disabled="true">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="ID Artsoft" id="GASOExternalIdId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.gasoExternalId" bindingMode="ONE_WAY" />
+            </Bindings>
+          </InputArea>
+          <InputArea name="GASOExtendedId" disabled="true">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="Nr. Encomenda" id="GASOExtendedIdId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.gasoExtendedId" bindingMode="ONE_WAY" />
+            </Bindings>
+          </InputArea>
+          <InputArea name="GASOSyncStatus" disabled="true">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="Sincronização" id="GASOSyncStatusId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.gasoSyncStatus" bindingMode="ONE_WAY" />
+            </Bindings>
+          </InputArea>
+          <InputArea name="GASOErrorMessage" disabled="true">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="Msg Erro" id="GASOErrorMessageId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.gasoErrorMessage" bindingMode="ONE_WAY" />
+            </Bindings>
+          </InputArea>
           <!-- Delivery recipient -->
           <Lookup name="DeliveryRecipient">
             <Bindings>

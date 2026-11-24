@@ -5,6 +5,7 @@
         <Declaration name="OrderMetaList" type="LoOrderMeta" />
         <Declaration name="HasNoOrderRole" type="String" />
         <Declaration name="BoOrderRole" type="BoOrderRole" />
+        <Declaration name="GasoFirstTemplate" type="DomPKey" />
       </Declarations>
       <Parameters>
         <Input name="OrdererPKey" type="DomPKey" />
@@ -55,8 +56,25 @@
           <Input name="documentType" value="ProcessContext::DocumentType" />
         </Parameters>
         <Return name="ProcessContext::OrderMetaList" />
-        <TransitionTo action="ShowView" />
+        <TransitionTo action="GasoFirstTemplate" />
       </Action>
+      <!-- GASO: sem template disponível, o comercial é informado e a encomenda não é criada -->
+      <Action name="GasoFirstTemplate" actionType="LOGIC" call="ProcessContext::OrderMetaList.getFirstEntry">
+        <Return name="ProcessContext::GasoFirstTemplate" />
+        <TransitionTo action="GasoTemplate_Decision" />
+      </Action>
+      <Action name="GasoTemplate_Decision" actionType="DECISION" parameter="ProcessContext::GasoFirstTemplate">
+        <Case value=" " action="GasoMessage_NoTemplate" />
+        <CaseEmpty action="GasoMessage_NoTemplate" />
+        <CaseElse action="ShowView" />
+      </Action>
+      <Action name="GasoMessage_NoTemplate" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoNoOrderTemplate" />
+        <Cases>
+          <Case value="Ok" action="GasoEndWithoutTemplate" />
+        </Cases>
+      </Action>
+      <Action actionType="END" name="GasoEndWithoutTemplate" />
       <Action actionType="VIEW" name="ShowView">
         <UIDescription>Order::CreateNewWizard</UIDescription>
         <Events>

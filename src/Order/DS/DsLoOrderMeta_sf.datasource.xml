@@ -55,6 +55,8 @@ var sqlStmt = "SELECT DISTINCT Order_Template__c.Id AS pKey, ";
     sqlStmt += "AND Order_Template__c.Document_Type__c IN (#documentType#) ";
   } else {
     sqlStmt += "AND Order_Template__c.Document_Type__c IN ('OrderEntry','Invoice') ";
+    // GASO: nesta fase só o template Direct está disponível na app
+    sqlStmt += "AND Order_Template__c.Name = 'Direct' ";
   }
 
   if (!Utils.isEmptyString(customerPKey)){

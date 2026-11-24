@@ -1,0 +1,27 @@
+<DataSource name="DsLuMyGasoOrderEligibility" backendSystem="sf" businessObjectClass="LuMyGasoOrderEligibility" external="true" schemaVersion="2.0">
+  <Database platform="SQLite">
+    <Load><![CDATA[
+  // GASO: regras para abrir uma encomenda (sem ligação) e rascunho existente do cliente.
+  // blockReason: '' (pode encomendar) | 'Status' | 'Financial' | 'NoPrice'
+  // Situação Financeira que bloqueia: provisoriamente só '1' (Registo Inativo), até à lista definitiva.
+  var customerPKey = Utils.convertForDBParam(jsonQuery.customerPKey, "DomPKey");
+  var sqlParams = { customerPKey: customerPKey };
+
+  var sqlStmt = "SELECT Account.Id AS pKey, ";
+  sqlStmt += "CASE ";
+  sqlStmt += "WHEN IFNULL(Account.GASO_Status__c, '') NOT IN ('Approved', 'ApprovedWithoutCredit') THEN 'Status' ";
+  sqlStmt += "WHEN IFNULL(Account.GASO_FinantialStatus__c, '') IN ('1') THEN 'Financial' ";
+  sqlStmt += "WHEN TRIM(IFNULL(Account.GASO_DocumentSeries__c, '')) = '' AND IFNULL(Account.GASO_PricingTable__c, 0) <= 0 ";
+  sqlStmt += "  AND NOT EXISTS (SELECT 1 FROM CP_Pricing_Condition__c WHERE CP_Pricing_Condition__c.IsDeleted <> '1' ";
+  sqlStmt += "    AND (CP_Pricing_Condition__c.Replication_Account__c = Account.Id OR CP_Pricing_Condition__c.Merged_Key__c LIKE Account.Id || '+%' ";
+  sqlStmt += "      OR CP_Pricing_Condition__c.Account_Set__c IN (SELECT Account_Set_Account__c.Account_Set__c FROM Account_Set_Account__c ";
+  sqlStmt += "        WHERE Account_Set_Account__c.Account_Set_Account__c = Account.Id AND Account_Set_Account__c.IsDeleted <> '1'))) THEN 'NoPrice' ";
+  sqlStmt += "ELSE '' END AS blockReason, ";
+  sqlStmt += "IFNULL((SELECT Order__c.Id FROM Order__c WHERE Order__c.Order_Account__c = Account.Id AND Order__c.Phase__c = 'Initial' ";
+  sqlStmt += "  AND Order__c.IsDeleted <> '1' AND Order__c.Responsible__c = '#UserPKey#' ORDER BY Order__c.CreatedDate DESC LIMIT 1), '') AS draftOrderPKey ";
+  sqlStmt += "FROM Account WHERE Account.Id = #customerPKey#";
+
+  return Utils.replaceMacrosParam(sqlStmt, sqlParams);
+]]></Load>
+  </Database>
+</DataSource>
