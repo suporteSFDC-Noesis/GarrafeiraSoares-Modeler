@@ -12,6 +12,7 @@
     <SimpleProperty name="payerValidFrom" type="DomDate" dataSourceProperty="payerValidFrom" />
     <SimpleProperty name="payerValidThru" type="DomDate" dataSourceProperty="payerValidThru" />
     <SimpleProperty name="paymentMode" type="DomPaymentMethod" dataSourceProperty="paymentMode" />
+    <SimpleProperty name="gasoPaymentDays" type="DomInteger" dataSourceProperty="gasoPaymentDays" />
   </SimpleProperties>
   <Methods></Methods>
 </LookupObject>

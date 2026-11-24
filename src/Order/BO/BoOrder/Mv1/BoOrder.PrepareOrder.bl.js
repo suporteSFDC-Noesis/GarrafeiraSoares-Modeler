@@ -66,6 +66,17 @@ me.setInitiationDate(Utils.createAnsiDateTimeToday());
 me.setCommitDate(Utils.createAnsiDateTimeToday());
 me.setDocumentType(me.getBoOrderMeta().getSdoSubType());
 
+//GASO: Data de Vencimento = data de criação na app + prazo da condição de pagamento (P.P. = 0 dias; sem prazo conhecido fica vazia)
+var gasoDueDateRaw = me.getGasoDueDate();
+if ((!Utils.isDefined(gasoDueDateRaw) || Utils.isEmptyString(gasoDueDateRaw) || String(gasoDueDateRaw).indexOf("1700-01-01") === 0) && Utils.isDefined(me.getLuOrderer())) {
+  var gasoPaymentDays = parseInt(me.getLuOrderer().getGasoPaymentDays(), 10);
+  if (!isNaN(gasoPaymentDays) && gasoPaymentDays >= 0) {
+    var gasoDueDate = Utils.convertAnsiDate2Date(Utils.createAnsiDateToday());
+    gasoDueDate.setDate(gasoDueDate.getDate() + gasoPaymentDays);
+    me.setGasoDueDate(Utils.convertDate2Ansi(gasoDueDate));
+  }
+}
+
 //Set value of order
 me.setTotalValue(0);
 me.setGrossTotalValue(0);

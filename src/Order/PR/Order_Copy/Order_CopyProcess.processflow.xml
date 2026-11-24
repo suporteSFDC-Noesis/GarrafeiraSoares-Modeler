@@ -14,6 +14,7 @@
         <Declaration name="CopyLu" type="LuCopyOrderLookup" />
         <Declaration name="OrderMetaList" type="LoOrderMeta" />
         <Declaration name="TemplateLegit" type="DomBool" />
+        <Declaration name="GasoEligibility" type="LuMyGasoOrderEligibility" />
       </Declarations>
       <Parameters>
         <Input name="MainPKey" type="DomPKey" />
@@ -54,8 +55,60 @@
         <TransitionTo action="TemplateLegit_Decision" />
       </Action>
       <Action name="TemplateLegit_Decision" actionType="DECISION" parameter="ProcessContext::TemplateLegit">
-        <Case value="true" action="CreateOrder" />
+        <Case value="true" action="GasoLoadEligibility" />
         <CaseElse action="Message_TemplateNotValid" />
+      </Action>
+      <!-- GASO: a cópia segue as regras da criação (estado, situação financeira, origem de preço) e só pode haver um rascunho -->
+      <Action name="GasoLoadEligibility" actionType="LOAD" type="LuMyGasoOrderEligibility">
+        <Parameters>
+          <Input name="customerPKey" value="ProcessContext::CopyLu.ordererPKey" />
+        </Parameters>
+        <Return name="ProcessContext::GasoEligibility" />
+        <TransitionTo action="GasoBlockReason_Decision" />
+      </Action>
+      <Action name="GasoBlockReason_Decision" actionType="DECISION" parameter="ProcessContext::GasoEligibility.blockReason">
+        <Case value="Status" action="GasoMessage_Status" />
+        <Case value="Financial" action="GasoMessage_Financial" />
+        <Case value="NoPrice" action="GasoMessage_NoPrice" />
+        <CaseElse action="GasoDraft_Decision" />
+        <CaseEmpty action="GasoDraft_Decision" />
+      </Action>
+      <Action name="GasoMessage_Status" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoOrderBlockedStatus" />
+        <Cases>
+          <Case value="Ok" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoMessage_Financial" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoOrderBlockedFinancial" />
+        <Cases>
+          <Case value="Ok" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoMessage_NoPrice" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoOrderBlockedNoPrice" />
+        <Cases>
+          <Case value="Ok" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoDraft_Decision" actionType="DECISION" parameter="ProcessContext::GasoEligibility.draftOrderPKey">
+        <CaseEmpty action="CreateOrder" />
+        <CaseElse action="GasoConfirmReplaceDraft" />
+      </Action>
+      <Action name="GasoConfirmReplaceDraft" actionType="CONFIRM" confirmType="YesNo">
+        <Message messageId="GasoCopyReplacesDraft" />
+        <Cases>
+          <Case value="Yes" action="GasoDeleteDraft" />
+          <Case value="No" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoDeleteDraft" actionType="PROCESS" process="Order::DeleteWizardProcess">
+        <Parameters>
+          <Input name="MainPKey" value="ProcessContext::GasoEligibility.draftOrderPKey" />
+          <Input name="ClbMainPKey" value="ProcessContext::ClbMainPKey" />
+          <Input name="CallInContext_clbMainPKey" value="ProcessContext::CallInContext_clbMainPKey" />
+        </Parameters>
+        <TransitionTo action="CreateOrder" />
       </Action>
       <Action name="CreateOrder" actionType="CREATE" type="BoOrder">
         <Parameters>

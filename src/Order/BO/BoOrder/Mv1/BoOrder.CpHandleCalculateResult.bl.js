@@ -57,6 +57,60 @@ if (Utils.isDefined(result.Debug) && Utils.isDefined(result.Debug[0]) && Utils.i
   result.Debug[0].PricingDate = Utils.convertAnsiDateTime2AnsiDate(Utils.convertFullDate2Ansi(result.Debug[0].PricingDate));
 }
 
+// GASO: origem do preço por linha (passo 90 GASO PCT): 1 = C102, 2 = C302, 3 = Série de Documento
+var gasoPriceOrigin = {};
+var GASO_ORIGIN_BY_SEARCH_STEP = { "10": 1, "20": 2, "30": 3 };
+if (Utils.isDefined(result.Debug)) {
+  result.Debug.forEach(function (itemDebug) {
+    if (!Utils.isDefined(itemDebug) || !Utils.isDefined(itemDebug.CS) || !Utils.isDefined(itemDebug.PKey)) return;
+    itemDebug.CS.forEach(function (step) {
+      if (step.No !== 90 || !step.Found || !Utils.isDefined(step.SearchSteps)) return;
+      step.SearchSteps.forEach(function (searchStep) {
+        if (searchStep.success && Utils.isDefined(GASO_ORIGIN_BY_SEARCH_STEP[searchStep.No])) {
+          gasoPriceOrigin[itemDebug.PKey] = GASO_ORIGIN_BY_SEARCH_STEP[searchStep.No];
+        }
+      });
+    });
+  });
+}
+
+// GASO: IVA da linha calculado pelo motor (passos 900 TAX National e 910 TAX Local)
+var gasoVatByItem = {};
+if (Utils.isDefined(result.SdoConditions)) {
+  result.SdoConditions.forEach(function (condition) {
+    var position = Number(condition.CndCpCalculationPosition);
+    if (position !== 900 && position !== 910) return;
+    var vat = gasoVatByItem[condition.SdoItemPKey] || { rate: 0, value: 0 };
+    vat.rate += Number(condition.ConvertedConditionValue) || 0;
+    vat.value += Number(condition.ConditionResult) || 0;
+    gasoVatByItem[condition.SdoItemPKey] = vat;
+  });
+}
+
+// GASO: IVA do cabeçalho por taxa (0, 6, 13, 23) somado a partir do IVA de cada linha. Na app o user exit
+// GASO_VAT_BUCKET_* não recebe a classificação fiscal do produto, por isso os passos 1000-1030 e o Pricing Info 1-4
+// são acertados aqui com os mesmos valores que o Salesforce calcula.
+var GASO_VAT_TOTAL_STEPS = { "1000": 0, "1010": 6, "1020": 13, "1030": 23 };
+var gasoVatByRate = { "0": 0, "6": 0, "13": 0, "23": 0 };
+Object.keys(gasoVatByItem).forEach(function (itemPKey) {
+  var vat = gasoVatByItem[itemPKey];
+  var rate = Object.prototype.hasOwnProperty.call(gasoVatByRate, String(vat.rate)) ? String(vat.rate) : "0";
+  gasoVatByRate[rate] += vat.value;
+});
+Object.keys(gasoVatByRate).forEach(function (rate) {
+  gasoVatByRate[rate] = Math.round(gasoVatByRate[rate] * 100) / 100;
+});
+if (Utils.isDefined(result.SdoConditions)) {
+  result.SdoConditions.forEach(function (condition) {
+    var rate = GASO_VAT_TOTAL_STEPS[String(condition.CndCpCalculationPosition)];
+    if (!Utils.isDefined(rate)) return;
+    var total = gasoVatByRate[String(rate)];
+    condition.ConditionResult = total;
+    condition.ConvertedConditionValue = total;
+    condition.ConditionValue = total;
+  });
+}
+
 if (result.CSTAT === true) {
   var length = result.Items.length;
 
@@ -84,12 +138,19 @@ if (result.CSTAT === true) {
       orderItem.setPricingInfo2(result.Items[i].PricingInfo2);
       orderItem.setPricingInfo3(result.Items[i].PricingInfo3);
       orderItem.setPricingInfo4(result.Items[i].PricingInfo4);
-      orderItem.setPricingInfo5(result.Items[i].PricingInfo5);
+      var gasoOrigin = Utils.isDefined(gasoPriceOrigin[resultPkey]) ? gasoPriceOrigin[resultPkey] : 0;
+      var gasoOriginChanged = Number(orderItem.getPricingInfo5()) !== gasoOrigin;
+      orderItem.setPricingInfo5(gasoOrigin);
+      var gasoVat = gasoVatByItem[resultPkey] || { rate: 0, value: 0 };
+      orderItem.setGasoVatText(gasoVat.rate + "% - " + (Math.round(gasoVat.value * 100) / 100).toFixed(2) + " " + me.getCurrency());
       orderItem.setPricingInfo6(result.Items[i].PricingInfo6);
       orderItem.setPricingInfo7(result.Items[i].PricingInfo7);
       orderItem.setPricingInfo8(result.Items[i].PricingInfo8);
       orderItem.setPricingInfo9(result.Items[i].PricingInfo9);
       orderItem.setPricingInfo10(result.Items[i].PricingInfo10);
+      if (gasoOriginChanged) {
+        me.getLoItems().createDisplayInformationForItem(orderItem, me.getBoOrderMeta());
+      }
 
       me.getLoItems().resumeListRefresh(true);
     }
@@ -137,6 +198,11 @@ if (result.CSTAT === true) {
     me.setPricingInfo2(result.PricingInfo2);
     me.setPricingInfo3(result.PricingInfo3);
     me.setPricingInfo4(result.PricingInfo4);
+    // GASO: Pricing Info 1-4 = IVA 0% / 6% / 13% / 23%
+    me.setPricingInfo1(gasoVatByRate["0"]);
+    me.setPricingInfo2(gasoVatByRate["6"]);
+    me.setPricingInfo3(gasoVatByRate["13"]);
+    me.setPricingInfo4(gasoVatByRate["23"]);
     me.setPricingInfo5(result.PricingInfo5);
     me.setPricingInfo6(result.PricingInfo6);
     me.setPricingInfo7(result.PricingInfo7);

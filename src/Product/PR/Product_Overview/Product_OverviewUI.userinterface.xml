@@ -267,63 +267,83 @@
             <Items name="Items" itemPattern="LogisticsListItem">
               <Bindings>
                 <Binding target="PiecesPerParentUnit" type="Text" binding=".piecesPerParentUnit" bindingMode="ONE_WAY" />
+                <Binding target="PiecesPerSmallestUnit" type="Text" binding=".piecesPerSmallestUnit" bindingMode="ONE_WAY" />
                 <Binding target="UnitType" type="Text" binding=".unitType.text" bindingMode="ONE_WAY" />
                 <Binding target="CndCpWeight" type="Text" binding=".cndCpWeight" bindingMode="ONE_WAY" />
+                <Binding target="CndCpVolume" type="Text" binding=".cndCpVolume" bindingMode="ONE_WAY" />
                 <Binding target="EAN" type="Text" binding=".eAN" bindingMode="ONE_WAY" />
-                <Resource target="PiecesPerParentUnitLabel" type="Label" id="PiecesPerParentUnitLabel" defaultLabel="No." />
+                <Binding target="Sort" type="Text" binding=".sort" bindingMode="ONE_WAY" />
                 <Resource target="UnitTypeGTINLabel" type="Label" id="UnitTypeGTINLabel" defaultLabel="Unit/GTIN" />
-                <Resource target="CndCpWeightLabel" type="Label" id="CndCpWeightLabel" defaultLabel="Weight" />
+                <Resource target="WeightVolumeLabel" type="Label" id="WeightVolumeLabel" defaultLabel="Weight/Volume" />
+                <Resource target="PiecesParentSmallestLabel" type="Label" id="PiecesParentSmallestLabel" defaultLabel="Pcs parent/smallest" />
+                <Resource target="SortLabel" type="Label" id="SortLabel" defaultLabel="Sort" />
               </Bindings>
               <ItemListLayout>
                 <Default>
                   <Header>
                     <Col bindingId="UnitTypeGTINLabel" align="left" />
-                    <Col bindingId="CndCpWeightLabel" align="left" />
-                    <Col bindingId="PiecesPerParentUnitLabel" align="left" />
+                    <Col bindingId="WeightVolumeLabel" align="left" />
+                    <Col bindingId="PiecesParentSmallestLabel" align="left" />
+                    <Col bindingId="SortLabel" align="left" />
                   </Header>
                   <Col width="7em">
-                    <Row>
-                      <Col width="7em" layoutType="itemIdentifier" bindingId="EAN" />
-                    </Row>
-                    <Row>
-                      <Col width="7em" layoutType="itemSecondary" bindingId="UnitType" />
-                    </Row>
+                    <Row layoutType="itemIdentifier" bindingId="EAN" />
+                    <Row layoutType="itemSecondary" bindingId="UnitType" />
                   </Col>
-                  <Col width="2em" layoutType="itemValue" bindingId="CndCpWeight" />
-                  <Col width="1.3em" layoutType="itemValue" bindingId="PiecesPerParentUnit" />
+                  <Col width="3em">
+                    <Row layoutType="itemValue" bindingId="CndCpWeight" />
+                    <Row layoutType="itemValue" bindingId="CndCpVolume" />
+                  </Col>
+                  <Col width="3em">
+                    <Row layoutType="itemValue" bindingId="PiecesPerParentUnit" />
+                    <Row layoutType="itemValue" bindingId="PiecesPerSmallestUnit" />
+                  </Col>
+                  <Col width="1.5em" layoutType="itemValue" bindingId="Sort" />
                 </Default>
                 <Tablet>
                   <Default>
                     <Header>
                       <Col bindingId="UnitTypeGTINLabel" align="left" />
-                      <Col bindingId="CndCpWeightLabel" align="left" />
-                      <Col bindingId="PiecesPerParentUnitLabel" align="left" />
+                      <Col bindingId="WeightVolumeLabel" align="left" />
+                      <Col bindingId="PiecesParentSmallestLabel" align="left" />
+                      <Col bindingId="SortLabel" align="left" />
                     </Header>
                     <Col width="7em">
-                      <Row>
-                        <Col width="7em" layoutType="itemIdentifier" bindingId="EAN" />
-                      </Row>
-                      <Row>
-                        <Col width="7em" layoutType="itemSecondary" bindingId="UnitType" />
-                      </Row>
+                      <Row layoutType="itemIdentifier" bindingId="EAN" />
+                      <Row layoutType="itemSecondary" bindingId="UnitType" />
                     </Col>
-                    <Col width="2em" layoutType="itemValue" bindingId="CndCpWeight" />
-                    <Col flex="1" layoutType="itemValue" bindingId="PiecesPerParentUnit" />
+                    <Col width="3em">
+                      <Row layoutType="itemValue" bindingId="CndCpWeight" />
+                      <Row layoutType="itemValue" bindingId="CndCpVolume" />
+                    </Col>
+                    <Col width="3em">
+                      <Row layoutType="itemValue" bindingId="PiecesPerParentUnit" />
+                      <Row layoutType="itemValue" bindingId="PiecesPerSmallestUnit" />
+                    </Col>
+                    <Col flex="1" layoutType="itemValue" bindingId="Sort" />
                   </Default>
                 </Tablet>
                 <Phone>
                   <Default>
                     <Header>
                       <Col bindingId="UnitTypeGTINLabel" align="left" />
-                      <Col bindingId="CndCpWeightLabel" align="left" />
-                      <Col bindingId="PiecesPerParentUnitLabel" align="left" />
+                      <Col bindingId="WeightVolumeLabel" align="left" />
+                      <Col bindingId="PiecesParentSmallestLabel" align="left" />
+                      <Col bindingId="SortLabel" align="left" />
                     </Header>
                     <Col width="7em">
                       <Row layoutType="itemIdentifier" bindingId="EAN" />
                       <Row layoutType="itemSecondary" bindingId="UnitType" />
                     </Col>
-                    <Col width="1.7em" layoutType="itemValue" bindingId="CndCpWeight" />
-                    <Col flex="1" layoutType="itemValue" bindingId="PiecesPerParentUnit" />
+                    <Col width="2.5em">
+                      <Row layoutType="itemValue" bindingId="CndCpWeight" />
+                      <Row layoutType="itemValue" bindingId="CndCpVolume" />
+                    </Col>
+                    <Col width="2.5em">
+                      <Row layoutType="itemValue" bindingId="PiecesPerParentUnit" />
+                      <Row layoutType="itemValue" bindingId="PiecesPerSmallestUnit" />
+                    </Col>
+                    <Col flex="1" layoutType="itemValue" bindingId="Sort" />
                   </Default>
                 </Phone>
               </ItemListLayout>

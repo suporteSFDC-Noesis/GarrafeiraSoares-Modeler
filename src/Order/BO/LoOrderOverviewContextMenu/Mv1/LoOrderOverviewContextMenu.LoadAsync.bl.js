@@ -181,8 +181,8 @@ contextMenuItemList.push(menuEntry0);
 contextMenuItemList.push(menuEntry1);
 
 // Disabling Delete and Copy for Delivery Doc Type
+// GASO: a opção Delete não é disponibilizada na app (menuEntry2); o rascunho só é eliminado ao criar uma encomenda nova
 if(documentType !== BLConstants.Order.DOCUMENT_TYPE_DELIVERY) {
-  contextMenuItemList.push(menuEntry2);
   contextMenuItemList.push(menuEntry3);
 }
 

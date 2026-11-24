@@ -1,0 +1,10 @@
+<LookupObject name="LuMyGasoOrderEligibility" generateLoadMethod="true" schemaVersion="1.1">
+  <DataSource name="DsLuMyGasoOrderEligibility" />
+  <SimpleProperties>
+    <SimpleProperty name="blockReason" type="DomString" storable="false" dataSourceProperty="blockReason" />
+    <SimpleProperty name="draftOrderPKey" type="DomPKey" storable="false" dataSourceProperty="draftOrderPKey" />
+  </SimpleProperties>
+  <Methods>
+    <Method name="loadAsync" />
+  </Methods>
+</LookupObject>

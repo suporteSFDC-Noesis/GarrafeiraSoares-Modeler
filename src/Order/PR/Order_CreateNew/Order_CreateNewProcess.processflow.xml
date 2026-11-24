@@ -1,4 +1,4 @@
-<Process name="Order::CreateNewProcess" defaultAction="IsInvalidOrder_Decision" schemaVersion="0.0.0.5">
+<Process name="Order::CreateNewProcess" defaultAction="GasoLoadEligibility" schemaVersion="0.0.0.5">
   <Entry>
     <ProcessContext>
       <Declarations>
@@ -11,6 +11,7 @@
         <Declaration name="SfReplicationCallbacks" type="BoSfReplicationCallbacks" />
         <Declaration name="isOrderDataAvailable" type="DomBool" />
         <Declaration name="DelRole" type="BoDeliveryRole" />
+        <Declaration name="GasoEligibility" type="LuMyGasoOrderEligibility" />
       </Declarations>
       <Parameters>
         <Input name="SdoMetaPKey" type="DomPKey" />
@@ -23,20 +24,6 @@
       </Parameters>
     </ProcessContext>
     <EntryActions>
-      <Action name="CreateOrder" actionType="CREATE" type="BoOrder">
-        <Parameters>
-          <Input name="SdoMetaPKey" value="ProcessContext::SdoMetaPKey" />
-          <Input name="OrdererPKey" value="ProcessContext::OrdererPKey" />
-          <Input name="ClbMainPKey" value="ProcessContext::ClbMainPKey" />
-          <Input name="etpWarehousePKey" value="ProcessContext::EtpWarehousePKey" />
-          <Input name="CallInContext_clbMainPKey" value="ProcessContext::CallInContext_clbMainPKey" />
-          <Input name="OwnerPKey" value="ApplicationContext::User.pKey" />
-          <Input name="ResponsiblePKey" value="ApplicationContext::User.pKey" />
-          <Input name="CallOutOfStockProducts" value="ProcessContext::CallOutOfStockProducts" />
-          <Input name="boCallCache" value="ProcessContext::BoCall" />
-        </Parameters>
-        <Return name="ProcessContext::OrderBo" />
-      </Action>
       <Action name="CreateReplicationCallBacksBo" actionType="CREATE" type="BoSfReplicationCallbacks">
         <Return name="ProcessContext::SfReplicationCallbacks" />
       </Action>
@@ -51,9 +38,68 @@
   </Entry>
   <Body>
     <Actions>
-      <Action name="IsInvalidOrder_Decision" actionType="DECISION" parameter="ProcessContext::OrderBo.isInvalidOrder">
-        <Case value="1" action="End" />
-        <CaseElse action="DSD_Decision" />
+      <!-- GASO: regras para abrir a encomenda (estado, situação financeira, origem de preço), rascunho existente e dados do cliente
+           são verificados antes de criar a encomenda, para que um bloqueio não deixe nenhuma encomenda gravada -->
+      <Action name="GasoLoadEligibility" actionType="LOAD" type="LuMyGasoOrderEligibility">
+        <Parameters>
+          <Input name="customerPKey" value="ProcessContext::OrdererPKey" />
+        </Parameters>
+        <Return name="ProcessContext::GasoEligibility" />
+        <TransitionTo action="GasoBlockReason_Decision" />
+      </Action>
+      <Action name="GasoBlockReason_Decision" actionType="DECISION" parameter="ProcessContext::GasoEligibility.blockReason">
+        <Case value="Status" action="GasoMessage_Status" />
+        <Case value="Financial" action="GasoMessage_Financial" />
+        <Case value="NoPrice" action="GasoMessage_NoPrice" />
+        <CaseElse action="GasoDraft_Decision" />
+        <CaseEmpty action="GasoDraft_Decision" />
+      </Action>
+      <Action name="GasoMessage_Status" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoOrderBlockedStatus" />
+        <Cases>
+          <Case value="Ok" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoMessage_Financial" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoOrderBlockedFinancial" />
+        <Cases>
+          <Case value="Ok" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoMessage_NoPrice" actionType="CONFIRM" confirmType="Ok">
+        <Message messageId="GasoOrderBlockedNoPrice" />
+        <Cases>
+          <Case value="Ok" action="End" />
+        </Cases>
+      </Action>
+      <Action name="GasoDraft_Decision" actionType="DECISION" parameter="ProcessContext::GasoEligibility.draftOrderPKey">
+        <CaseEmpty action="DSD_Decision" />
+        <CaseElse action="GasoConfirmUseDraft" />
+      </Action>
+      <Action name="GasoConfirmUseDraft" actionType="CONFIRM" confirmType="YesNo">
+        <Message messageId="GasoUseDraftOrder" />
+        <Cases>
+          <Case value="Yes" action="GasoOpenDraft" />
+          <Case value="No" action="GasoDeleteDraft" />
+        </Cases>
+      </Action>
+      <Action name="GasoOpenDraft" actionType="PROCESS" process="Order::LoadProcess">
+        <Parameters>
+          <Input name="MainPKey" value="ProcessContext::GasoEligibility.draftOrderPKey" />
+          <Input name="CustomerPKey" value="ProcessContext::OrdererPKey" />
+          <Input name="ClbMainPKey" value="ProcessContext::ClbMainPKey" />
+          <Input name="CallInContext_clbMainPKey" value="ProcessContext::CallInContext_clbMainPKey" />
+          <Input name="BoCall" value="ProcessContext::BoCall" />
+        </Parameters>
+        <TransitionTo action="End" />
+      </Action>
+      <Action name="GasoDeleteDraft" actionType="PROCESS" process="Order::DeleteWizardProcess">
+        <Parameters>
+          <Input name="MainPKey" value="ProcessContext::GasoEligibility.draftOrderPKey" />
+          <Input name="ClbMainPKey" value="ProcessContext::ClbMainPKey" />
+          <Input name="CallInContext_clbMainPKey" value="ProcessContext::CallInContext_clbMainPKey" />
+        </Parameters>
+        <TransitionTo action="DSD_Decision" />
       </Action>
       <Action name="DSD_Decision" actionType="DECISION" parameter="ProcessContext::TourUserRole.pKey">
         <CaseEmpty action="CheckDataAvailability" />
@@ -76,9 +122,28 @@
         <TransitionTo action="DataAvailability_Decision" />
       </Action>
       <Action name="DataAvailability_Decision" actionType="DECISION" parameter="ProcessContext::isOrderDataAvailable">
-        <Case value="1" action="StartNavigation" />
+        <Case value="1" action="CreateOrder" />
         <Case value="2" action="Message_OrderDataNotOnDevice" />
         <CaseElse action="RequestOnDemandData_DSD_Decision" />
+      </Action>
+      <Action name="CreateOrder" actionType="CREATE" type="BoOrder">
+        <Parameters>
+          <Input name="SdoMetaPKey" value="ProcessContext::SdoMetaPKey" />
+          <Input name="OrdererPKey" value="ProcessContext::OrdererPKey" />
+          <Input name="ClbMainPKey" value="ProcessContext::ClbMainPKey" />
+          <Input name="etpWarehousePKey" value="ProcessContext::EtpWarehousePKey" />
+          <Input name="CallInContext_clbMainPKey" value="ProcessContext::CallInContext_clbMainPKey" />
+          <Input name="OwnerPKey" value="ApplicationContext::User.pKey" />
+          <Input name="ResponsiblePKey" value="ApplicationContext::User.pKey" />
+          <Input name="CallOutOfStockProducts" value="ProcessContext::CallOutOfStockProducts" />
+          <Input name="boCallCache" value="ProcessContext::BoCall" />
+        </Parameters>
+        <Return name="ProcessContext::OrderBo" />
+        <TransitionTo action="IsInvalidOrder_Decision" />
+      </Action>
+      <Action name="IsInvalidOrder_Decision" actionType="DECISION" parameter="ProcessContext::OrderBo.isInvalidOrder">
+        <Case value="1" action="End" />
+        <CaseElse action="StartNavigation" />
       </Action>
       <Action name="StartNavigation" actionType="DECISION" parameter="ProcessContext::OrderBo.boOrderMeta.sdoSubType">
         <Case value="Delivery" action="StartNavigation_Delivery" />

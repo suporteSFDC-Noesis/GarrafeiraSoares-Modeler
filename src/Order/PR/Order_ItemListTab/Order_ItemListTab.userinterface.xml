@@ -388,6 +388,19 @@
               <Binding target="Value" binding="ProcessContext::MainBO.LoItems.Current.focusProductType" bindingMode="ONE_WAY" />
             </Bindings>
           </InputArea>
+          <!-- GASO: origem do preço e IVA da linha (taxa e valor calculados pelo motor de preços) -->
+          <InputArea name="GasoPriceOrigin" disabled="true">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="Origem do Preço" id="GasoPriceOriginId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.LoItems.Current.gasoPriceOriginText" bindingMode="ONE_WAY" />
+            </Bindings>
+          </InputArea>
+          <InputArea name="GasoVat" disabled="true">
+            <Bindings>
+              <Resource target="Label" type="Label" defaultLabel="IVA" id="GasoVatId" />
+              <Binding target="Value" binding="ProcessContext::MainBO.LoItems.Current.gasoVatText" bindingMode="ONE_WAY" />
+            </Bindings>
+          </InputArea>
           <!-- Stock -->
           <Merger name="StockMerger" disabled="true" pattern="twoInputControls" labelHandling="Own" leftRatio="1" rightRatio="2">
             <Bindings>

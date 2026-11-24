@@ -80,6 +80,11 @@
     <Attribute name="pricingInfo9" table="Order__c" column="Pricing_Info_9__c" />
     <Attribute name="pricingInfo10" table="Order__c" column="Pricing_Info_10__c" />
     <Attribute name="syncStatus" table="Order__c" column="_syncStatus" />
+    <Attribute name="gasoDueDate" table="Order__c" column="GASO_DueDate__c" />
+    <Attribute name="gasoExternalId" table="Order__c" column="GASO_ExternalID__c" />
+    <Attribute name="gasoExtendedId" table="Order__c" column="GASO_ExtendedID__c" />
+    <Attribute name="gasoSyncStatus" table="Order__c" column="GASO_SyncStatus__c" />
+    <Attribute name="gasoErrorMessage" table="Order__c" column="GASO_ErrorMessage__c" />
   </Attributes>
   <Entities>
     <Entity name="Order__c" alias="" idAttribute="Id" />

@@ -2348,6 +2348,9 @@
         <Label id="UnitTypeGTINLabel" text="Unidade/GTIN" translationStatus="7"/>
         <Label id="CndCpVolumeLabel" text="Volume" translationStatus="7"/>
         <Label id="CndCpWeightLabel" text="Peso" translationStatus="7"/>
+        <Label id="WeightVolumeLabel" text="Peso/Volume" translationStatus="7"/>
+        <Label id="PiecesParentSmallestLabel" text="Qtd. pai/menor" translationStatus="7"/>
+        <Label id="SortLabel" text="Ordem" translationStatus="7"/>
         <Label id="GTINLabel" text="GTIN:" translationStatus="7"/>
         <Label id="EANLabel" text="GTIN" translationStatus="7"/>
         <Label id="DateLabel" text="Data" translationStatus="7"/>
@@ -3890,16 +3893,25 @@
       <Process id="Order.AddProductLookupProcess"/>
       <Process id="Order.AddProductProcess"/>
       <Process id="Order.CreateNewProcess">
+        <Label id="GasoOrderBlockedStatus" text="O cliente não está Aprovado nem Aprovado sem Crédito. Não é possível criar a encomenda." translationStatus="7"/>
+        <Label id="GasoOrderBlockedFinancial" text="Situação financeira do Cliente não permite abrir Encomenda" translationStatus="7"/>
+        <Label id="GasoOrderBlockedNoPrice" text="O cliente não tem Preços Negociados, Tabela de Preços nem Série de Documento. Não é possível criar a encomenda." translationStatus="7"/>
+        <Label id="GasoUseDraftOrder" text="Este cliente já tem uma encomenda em rascunho. Quer usá-la? Se escolher Não, o rascunho é eliminado e é aberta uma encomenda nova." translationStatus="7"/>
         <Label id="CasConfirmOrderDataNotOnDevice" text="A nova encomenda não pode ser aberta devido à falta de dados. Aguarde que o processo de sincronização termine." translationStatus="7"/>
       </Process>
       <Process id="Order.CopyProcess">
         <Label id="CasTemplateNotValidForCopy" text="A encomenda não pode ser copiada porque o modelo já não é válido para o utilizador atual." translationStatus="7"/>
+        <Label id="GasoOrderBlockedStatus" text="O cliente não está Aprovado nem Aprovado sem Crédito. Não é possível criar a encomenda." translationStatus="7"/>
+        <Label id="GasoOrderBlockedFinancial" text="Situação financeira do Cliente não permite abrir Encomenda" translationStatus="7"/>
+        <Label id="GasoOrderBlockedNoPrice" text="O cliente não tem Preços Negociados, Tabela de Preços nem Série de Documento. Não é possível criar a encomenda." translationStatus="7"/>
+        <Label id="GasoCopyReplacesDraft" text="Este cliente já tem uma encomenda em rascunho. Para copiar, o rascunho é eliminado. Quer continuar?" translationStatus="7"/>
       </Process>
       <Process id="Order.CancelWizardProcess">
         <Label id="CasConfirmCancelMsg" text="Pretende cancelar este documento?" translationStatus="7"/>
       </Process>
       <Process id="Order.CreateNewProcess"/>
       <Process id="Order.CreateNewWizardProcess">
+        <Label id="GasoNoOrderTemplate" text="Não tem nenhum tipo de encomenda disponível. Não é possível criar a encomenda." translationStatus="7"/>
         <Label id="CasMessageNoOrdererRole" text="Não é possível criar encomendas para um cliente que não é um ordenante. O seu administrador do Salesforce pode ajudá-lo." translationStatus="7"/>
       </Process>
       <Process id="Order.CreateNewWithCustomerProcess"/>
@@ -4185,6 +4197,9 @@
         <Label id="CasSdoMainTotalValueTooSmall" text="O valor total #totalValue# da encomenda é inferior ao valor mínimo #minValue# do modelo da Encomenda." translationStatus="7"/>
         <Label id="CasSdoMainProductItemMetaNotUnique" text="O(s) produto(s) #summary# foi/foram atribuído(s) mais do que uma vez usando o mesmo modelo de item." translationStatus="7"/>
         <Label id="CasSdoCommitDateGreaterDeliveryDate" text="A data da encomenda deve ser anterior ou igual à data da entrega." translationStatus="7"/>
+        <Label id="GasoDueDateEmpty" text="Indique a data de vencimento." translationStatus="7"/>
+        <Label id="GasoDueDateBeforeToday" text="A data de vencimento não pode ser anterior a hoje." translationStatus="7"/>
+        <Label id="GasoDueDateTooLarge" text="A data de vencimento tem de estar dentro do prazo da condição de pagamento (#days# dias): no máximo #maxDate#." translationStatus="7"/>
         <Label id="CasSdoDeliveryDateNull" text="Introduza uma data de entrega." translationStatus="7"/>
         <Label id="CasSdoMainDeliveryDateTooLarge" text="Escolha uma data de entrega durante os próximos #days# dias." translationStatus="7"/>
         <Label id="CasSdoMainDeliveryDateTooSmall" text="Escolha uma data de entrega que seja pelo menos daqui a #days# dias úteis." translationStatus="7"/>

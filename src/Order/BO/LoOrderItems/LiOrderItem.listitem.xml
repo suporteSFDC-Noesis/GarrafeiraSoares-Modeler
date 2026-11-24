@@ -107,5 +107,8 @@
     <SimpleProperty name="maxValue" type="DomDecimal" />
     <SimpleProperty name="percentDiscount" type="DomDecimal" />
     <SimpleProperty name="showInBasket" type="DomBool" />
+    <!-- GASO: origem do preço e IVA da linha, mostrados no painel de detalhe do item -->
+    <SimpleProperty name="gasoPriceOriginText" type="DomText" storable="false" />
+    <SimpleProperty name="gasoVatText" type="DomText" storable="false" />
   </SimpleProperties>
 </ListItem>
